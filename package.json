@@ -1,0 +1,26 @@
+{
+  "name": "nuxtfireworks",
+  "version": "1.0.0",
+  "description": "My sensational Nuxt.js project",
+  "author": "Damià A. Pont",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.6.2",
+    "@firebase/auth": "^0.14.4",
+    "@firebase/firestore": "^1.14.2",
+    "@nuxtjs/firebase": "^5.0.7",
+    "firebase": "^7.14.2",
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/runtime-corejs3": "^7.9.2",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "core-js": "3"
+  }
+}
