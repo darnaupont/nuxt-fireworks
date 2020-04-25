@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
   ** Headers of the page
   */
@@ -61,10 +61,6 @@ export default {
           ssr: true
         },
         firestore: true,
-        functions: {
-          // emulatorPort: 12345
-        },
-        storage: true,
       }
     }
   ]
