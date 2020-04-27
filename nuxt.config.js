@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 export default {
-  mode: 'spa',
+  mode: 'universal',
   /*
   ** Headers of the page
   */
@@ -40,6 +40,7 @@ export default {
   ** Nuxt.js modules
   */
  modules: [
+  '@nuxtjs/pwa',
   [
     '@nuxtjs/firebase',
     {
@@ -53,18 +54,55 @@ export default {
         appId: process.env.FIREBASE_APP_ID,
         measurementId: process.env.FIREBASE_MEASUREMENT_ID,
       },
+      onFirebaseHosting: false,
       services: {
         auth: {
-          initialize: {
-            onAuthStateChangedAction: 'onAuthStateChanged'
-          },
+          // initialize: {
+          //   onAuthStateChangedAction: 'onAuthStateChanged'
+          // },
           ssr: true
         },
         firestore: true,
+        functions: {
+          // emulatorPort: 12345
+        },
+        storage: true,
+        realtimeDb: true,
+        performance: true,
+        analytics: true,
+        remoteConfig: {
+          settings: {
+            fetchTimeoutMillis: 60000,
+            minimumFetchIntervalMillis: 43200000
+          },
+          defaultConfig: {
+            welcome_message: 'Welcome'
+          }
+        },
+        messaging: {
+          createServiceWorker: true
+        }
       }
     }
   ]
 ],
+pwa: {
+  // disable the modules you don't need
+  meta: false,
+  icon: false,
+  // if you omit a module key form configuration sensible defaults will be applied
+  // manifest: false,
+
+  workbox: {
+    importScripts: [
+      // ...
+      '/firebase-auth-sw.js'
+    ],
+    // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
+    // only set this true for testing and remember to always clear your browser cache in development
+    dev: false
+  }
+},
   /*
   ** Build configuration
   */

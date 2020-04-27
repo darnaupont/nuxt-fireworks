@@ -6,7 +6,7 @@
         Hi, {{this.authUser.email}} write me something!
       </div>
       <ul>
-        <li v-for="item in textList" :key="item.id" class="liItem">
+        <li v-for="item in biglist" :key="item.id" class="liItem">
           {{ item.message}}
   <br>
   <b>{{item.email}}</b>
@@ -14,7 +14,7 @@
       </ul>
       <input v-model="formText" type="text" />
       <button @click="writeToFirestore()">write</button>
-      <button @click="readFromFirestore()">read</button>
+      <!-- <button @click="readFromFirestore()">read</button> -->
     </div>
     <div v-else>
       {{this.authUser}}
@@ -30,7 +30,6 @@
       <input v-model="formData.password" type="text" />
       <button @click="signInUser()">login</button>
       <button @click="createUser()">register</button>
-      <button @click="readFromFirestore()">read</button>
       <div class="links">
         <a
           href="https://nuxtjs.org/"
@@ -66,18 +65,27 @@ export default {
       textList:[]
     }
   },
+  mounted () {
+    this.readFromFirestore();
+  },
     computed: {
     ...mapState({
       authUser: (state) => state.authUser
     }),
     ...mapGetters({
       isLoggedIn: 'isLoggedIn'
-    })
+    }),
+    logged(){
+        return this.$store.authUser
+    },
+    biglist() {
+      return this.textList
+    }
   },
   methods: {
-        checkVuexStore() {
-      this.$store.dispatch('checkVuexStore')
-    },
+    //     checkVuexStore() {
+    //   this.$store.dispatch('checkVuexStore')
+    // },
      async writeToFirestore() {
       if (this.authUser){
       const messageRef = this.$fireStore.collection('message').doc(this.authUser.uid)
@@ -110,11 +118,11 @@ export default {
 
             const docid = doc.id;
             const docmessage = doc.data().message;
-            console.log(doc.data());
+            // console.log(doc.data());
             const docemail = doc.data().email ? doc.data().email : "unknown";
             const item = {id: docid, message: docmessage, email: docemail }
             test.push(item)
-            console.log(doc.id, " => ", doc.data());
+            // console.log(doc.id, " => ", doc.data());
         });
       } catch (e) {
         alert(e)
@@ -144,19 +152,21 @@ export default {
     },
     async signInUser() {
       console.log('sing')
-      try {
-        await this.$fireAuth.signInWithEmailAndPassword(
+      try{
+      const userData = await this.$fireAuth.signInWithEmailAndPassword(
           this.formData.email,
           this.formData.password
         )
-          this.checkVuexStore();
+        // console.log(userData)
+         this.$store.commit('userLogin', {userData})
       } catch (e) {
         alert(e)
       }
     },
     async logout() {
       try {
-        await this.$fireAuth.signOut()
+        const userData = await this.$fireAuth.signOut()
+         this.$store.commit('userLogin', {userData})
       } catch (e) {
         alert(e)
       }
