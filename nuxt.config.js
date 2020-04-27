@@ -60,7 +60,7 @@ export default {
           // initialize: {
           //   onAuthStateChangedAction: 'onAuthStateChanged'
           // },
-          ssr: true
+          ssr: false
         },
         firestore: true,
         functions: {
